@@ -19,22 +19,10 @@ workflows:
   master-build:
     jobs:
       - gcp-gcr/build_and_push_image:
+          context: gcr-push-sample
           registry-url: asia.gcr.io
           image: sample-image
           tag: latest
           filters:
             branches:
               only: master
-  release-build:
-    jobs:
-      - gcp-gcr/build_and_push_image:
-          # google-project-id: sandbox-project-234113
-          # google-compute-zone: asia-east1-a
-          registry-url: asia.gcr.io
-          image: sample-image
-          tag: latest
-          filters:
-            branches:
-              ignore: /.*/
-            tags:
-              only: /^v.*/
