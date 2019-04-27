@@ -1,6 +1,6 @@
 version: 2.1
 orbs:
-  gcp-gcr: circleci/gcp-gcr@1.0.0
+  gcp-gcr: circleci/gcp-gcr@0.0.5
 jobs:
   test:
     docker:
@@ -19,8 +19,6 @@ workflows:
   master-build:
     jobs:
       - gcp-gcr/build_and_push_image:
-          google-project-id: sandbox-project-234113
-          google-compute-zone: asia-east1-a
           registry-url: asia.gcr.io
           image: sample-image
           tag: latest
@@ -30,8 +28,8 @@ workflows:
   release-build:
     jobs:
       - gcp-gcr/build_and_push_image:
-          google-project-id: sandbox-project-234113
-          google-compute-zone: asia-east1-a
+          # google-project-id: sandbox-project-234113
+          # google-compute-zone: asia-east1-a
           registry-url: asia.gcr.io
           image: sample-image
           tag: latest
