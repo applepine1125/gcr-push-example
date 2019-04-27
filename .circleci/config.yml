@@ -1,11 +1,42 @@
 version: 2
+orbs:
+  gcp-gcr: circleci/gcp-gcr@1.0.0
 jobs:
-  build:
+  test:
     docker:
       - image: circleci/golang:1.11
-
     working_directory: /go/src/github.com/applepine1125/gcr-push-example
     steps:
       - checkout
       - run: go get -v -t -d ./...
       - run: go test -v ./...
+  
+workflows:
+  version: 2
+  test:
+    jobs:
+      - test
+  master-build:
+    jobs:
+      - gcp-gcr/build_and_push_image:
+          google-project-id: sandbox-project-234113
+          google-compute-zone: asia-east1-a
+          registry-url: asia.gcr.io
+          image: sample-image
+          tag: latest
+          filters:
+            branches:
+              only: master
+  release-build:
+    jobs:
+      - gcp-gcr/build_and_push_image:
+          google-project-id: sandbox-project-234113
+          google-compute-zone: asia-east1-a
+          registry-url: asia.gcr.io
+          image: sample-image
+          tag: latest
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^v.*/
